@@ -1,5 +1,6 @@
 from Etapa2 import EliminarAcentosYMayusculas
 from Etapa5 import Puntaje
+from PruebaGrafica import Grafico
 def MensajeDelResultado(PalabraParaAdivinar, cadenaOculta):
     """
     Retorna un mensaje al finalizar el juego    
@@ -128,7 +129,8 @@ def CorrerJuego(PalabraAdivinar,Puntos):
     while desaciertos <= 7 and not salidaAnticipada(caracter) and cadenaOculta.count("?") != 0 :
         
         PuntosEnPartida = Puntaje(aciertos,desaciertos) + Puntos
-        print(Mensaje(caracter, PalabraParaAdivinar) + "--> "  + cadenaOculta + Contador(aciertos, desaciertos, caracteresErrados) + " Puntos:" + str(PuntosEnPartida))
+        Grafico(desaciertos,Contador(aciertos, desaciertos, caracteresErrados),PuntosEnPartida,Mensaje(caracter, PalabraParaAdivinar), cadenaOculta)
+        #print(Mensaje(caracter, PalabraParaAdivinar) + "--> "  + cadenaOculta + Contador(aciertos, desaciertos, caracteresErrados) + " Puntos:" + str(PuntosEnPartida))
         caracter = ingreso(cadenaOculta, caracteresErrados)
         cadenaOculta = RevelarCadena(caracter, cadenaOculta, PalabraParaAdivinar)
         aciertos = contarAciertos(aciertos, caracter, PalabraParaAdivinar)
