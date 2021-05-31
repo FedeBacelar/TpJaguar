@@ -2,6 +2,7 @@ from texto import obtener_texto
 
 def separar(texto, palabra):
     """
+    Funciona junto a desmembrar: retorna una lista de palabras separadas
     Firma: Alejo
     """
     return texto.split(palabra)
@@ -16,7 +17,7 @@ def desmembrar(texto):
         texto = separar(texto, caracteres_posibles[i])
         texto = " ".join(texto)
     texto = texto.split()
-    return texto #Retorna el texto con todas las palabras
+    return texto 
 
 def EliminarAcentosYMayusculas(Palabra):
     """
@@ -77,15 +78,17 @@ def OrdenarDiccionario(Diccionario):
         NuevoDiccionario[key.lower()] = Diccionario[key]
     return NuevoDiccionario
 
-def CaracteristicasDelDiccionario(Diccionario):
+
+"""def CaracteristicasDelDiccionario(Diccionario):
     print("Hay {} palabras en el diccionario. Las cuales son: ".format(len(Diccionario)))
     for Palabra in Diccionario:
         print("{} : Cantidad repetida: {}".format(Palabra, Diccionario[Palabra]))
-   
-def main():
+
+Funcion fuera de servicio: Muestra caracteristicas del diccionario        
+"""
+def GenerarDiccionario():
     texto_a_procesar = desmembrar(obtener_texto())
     Diccionario = dicPalabrasCandidatas(texto_a_procesar)
     Diccionario = (OrdenarDiccionario(Diccionario))
-    CaracteristicasDelDiccionario(Diccionario)
-    
-main()
+    return Diccionario
+    #CaracteristicasDelDiccionario(Diccionario)

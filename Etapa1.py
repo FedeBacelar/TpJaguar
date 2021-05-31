@@ -1,15 +1,27 @@
-
+from Etapa2 import EliminarAcentosYMayusculas
+from Etapa5 import Puntaje
 def MensajeDelResultado(PalabraParaAdivinar, cadenaOculta):
+    """
+    Retorna un mensaje al finalizar el juego    
+    """
     return "FELICIDADES!!! LA PALABRA ERA " + PalabraParaAdivinar if PalabraParaAdivinar == "".join(cadenaOculta) else "PERDISTE!! LA PALABRA ERA "+ PalabraParaAdivinar +" BUENA SUERTE LA PROXIMA!!!"
 
 def salidaAnticipada(Caracter):
+    """
+    Valida si el usuario quiere salir del juego
+    """
     return (Caracter.upper() == 'FIN' or Caracter == '0')
 
 def ValidarCaracter(caracter, PalabraParaAdivinar):
+    """
+    Valida que el caracter ingresado este en la palabra a adivinar
+    """
     return(PalabraParaAdivinar.find(caracter) != -1 and caracter != "")
 
 def Mensaje(caracter, PalabraParaAdivinar):
-    Mensaje = ""
+    """
+    Imprime un mensaje para el juego
+    """
     if not caracter:
         Mensaje = "Palabra a adivinar: "
     elif ValidarCaracter(caracter, PalabraParaAdivinar):
@@ -19,18 +31,30 @@ def Mensaje(caracter, PalabraParaAdivinar):
     return(Mensaje)
 
 def armadoDeCadenas(lista):
+    """
+    Arma una cadena
+    """
     cadena = ""
     for letra in lista:
         cadena += letra
     return cadena
 
 def separarLetrasDeCadena(PalabraParaAdivinar):
+    """
+    Arma una lista de separando los caracteres de la palabra a adivinar
+    """
     return [letra for letra in PalabraParaAdivinar]
 
 def repetido(caracter,cadenaOculta, caracteresErrados):
+    """
+    Evalua si se ingreso caracteres repetidos
+    """
     return (caracter in separarLetrasDeCadena(cadenaOculta) or caracter in caracteresErrados)
 
 def RevelarCadena(caracter, cadenaOculta, PalabraParaAdivinar):
+    """
+    Revela la cadena en los caracteres descubiertos
+    """
     cadenaFinal = ""
     i = 0
     if ValidarCaracter(caracter, PalabraParaAdivinar):
@@ -46,24 +70,39 @@ def RevelarCadena(caracter, cadenaOculta, PalabraParaAdivinar):
     return cadenaFinal
 
 def CensuraTotal(PalabraParaAdivinar):
+    """
+    Arma una cadena censurada
+    """
     return "?"*len(PalabraParaAdivinar)
 
 def contarAciertos(aciertos,caracter, PalabraParaAdivinar):
+    """
+    Cuenta los aciertos
+    """
     if ValidarCaracter(caracter, PalabraParaAdivinar):
         aciertos += 1
     return aciertos
 
 def contarDesaciertos(desaciertos, caracter, PalabraParaAdivinar, caracteresErrados):
+    """
+    Cuenta los desaciertos
+    """
     if not ValidarCaracter(caracter, PalabraParaAdivinar):
         desaciertos += 1
         caracteresErrados += "-" + caracter if caracter != "" else ""
     return [desaciertos, caracteresErrados]
 
 def Contador(aciertos, desaciertos, caracteresErrados):
+    """
+    Arma un contador con las caracteristicas de la partida
+    """
     Puntos = " Aciertos: " + str(aciertos) + " Desaciertos: " + str(desaciertos) + caracteresErrados
     return(Puntos)
 
 def ingreso(cadenaOculta, caracteresErrados):
+    """
+    Evalua los ingresos
+    """
     caracter = str(input("Ingrese Letra_ "))
     if (not (caracter.isalpha() and len(caracter) == 1)) and not(salidaAnticipada(caracter)):
         while not (caracter.isalpha() and len(caracter) == 1) and not(salidaAnticipada(caracter)):
@@ -75,7 +114,11 @@ def ingreso(cadenaOculta, caracteresErrados):
             caracter = str(input("Ingrese Letra_ "))
     return caracter.lower()
 
-def CorrerJuego(PalabraParaAdivinar):
+def CorrerJuego(PalabraAdivinar,Puntos):
+    """
+    Inicia la partida
+    """
+    PalabraParaAdivinar = EliminarAcentosYMayusculas(PalabraAdivinar)
     caracter = ""
     aciertos = 0
     desaciertos = 0
@@ -84,18 +127,12 @@ def CorrerJuego(PalabraParaAdivinar):
 
     while desaciertos <= 7 and not salidaAnticipada(caracter) and cadenaOculta.count("?") != 0 :
         
-        print(Mensaje(caracter, PalabraParaAdivinar) + "--> "  + cadenaOculta + Contador(aciertos, desaciertos, caracteresErrados))
+        PuntosEnPartida = Puntaje(aciertos,desaciertos) + Puntos
+        print(Mensaje(caracter, PalabraParaAdivinar) + "--> "  + cadenaOculta + Contador(aciertos, desaciertos, caracteresErrados) + " Puntos:" + str(PuntosEnPartida))
         caracter = ingreso(cadenaOculta, caracteresErrados)
         cadenaOculta = RevelarCadena(caracter, cadenaOculta, PalabraParaAdivinar)
         aciertos = contarAciertos(aciertos, caracter, PalabraParaAdivinar)
         desaciertos = contarDesaciertos(desaciertos, caracter, PalabraParaAdivinar, caracteresErrados)[0]
         caracteresErrados = contarDesaciertos(desaciertos, caracter, PalabraParaAdivinar, caracteresErrados)[1]
     print(MensajeDelResultado(PalabraParaAdivinar, cadenaOculta))
-
-
-CorrerJuego("mariposa")
-
-'''
-Ingreso() capaz se puede modularizar mas (condiciones repetidas y no tan legible)
-'''
-
+    return([aciertos,desaciertos, PuntosEnPartida])
